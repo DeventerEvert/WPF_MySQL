@@ -1,0 +1,101 @@
+﻿<Window x:Class="WPF_MySQL.Views.switchQuestionValues"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_MySQL.Views"
+        mc:Ignorable="d"
+        Title="switchQuestionValues"
+        SizeToContent="WidthAndHeight" >
+    <Window.Resources>
+        <Style x:Key="DarkSpaceStyle"
+               TargetType="Button">
+            <Setter Property="Background"
+                    Value="#2C2C2C" />
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+            <Setter Property="FontSize"
+                    Value="18" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="C:\Users\evert\OneDrive\Afbeeldingen\quiztime.jpg" />
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- First StackPanel -->
+        <StackPanel x:Name="labelsContainer"
+                    Grid.Column="0"
+                    Orientation="Vertical">
+            <Label Content="Vragen"
+                   Foreground="white"
+                   FontSize="15"
+                   FontWeight="Bold"
+                   Margin="5" />
+        </StackPanel>
+
+        <!-- Second StackPanel -->
+        <StackPanel x:Name="textBoxContainer"
+                    Grid.Column="1"
+                    Orientation="Vertical">
+            <Label Content="VraagText"
+                   Foreground="white"
+                   FontSize="15"
+                   FontWeight="Bold"
+                   Margin="5" />
+        </StackPanel>
+
+        <!-- Third StackPanel -->
+        <StackPanel x:Name="imagePathContainer"
+                    Grid.Column="2"
+                    Orientation="Vertical">
+            <Label Content="Afbeeldings-pad"
+                   Foreground="white"
+                   FontSize="15"
+                   FontWeight="Bold"
+                   Margin="5" />
+        </StackPanel>
+
+        <StackPanel x:Name="imageBoxContainer"
+                    Grid.Column="3"
+                    Orientation="Vertical">
+            <Label Content="Afbeelding"
+                   Foreground="white"
+                   FontSize="15"
+                   FontWeight="Bold"
+                   Margin="5" />
+        </StackPanel>
+
+        <!-- Fifth StackPanel -->
+        <StackPanel x:Name="imageButtonContainer"
+                    Grid.Column="4"
+                    Orientation="vertical">
+            <Label Content="changeImageButton"
+                       FontWeight="Bold"
+                       Margin="5" />
+        </StackPanel>
+        <StackPanel x:Name="idBox"
+                    Grid.Column="5"
+                    Orientation="vertical">
+        </StackPanel>
+        <Button x:Name="submitBtn"
+                Grid.Column="4"
+                Style="{StaticResource DarkSpaceStyle}"
+                Content="Opslaan"
+                HorizontalAlignment="Left"
+                Margin="289,374,0,0"
+                VerticalAlignment="Top"
+                Width="90"
+                Height="40"
+                Click="submitBtn_Click" />
+    </Grid>
+</Window>

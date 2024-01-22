@@ -1,0 +1,170 @@
+﻿<Window x:Class="WPF_MySQL.Views.addQuestion_Answers"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_MySQL.Views"
+        xmlns:widget="clr-namespace:WPF_MySQL.smallViews"
+        mc:Ignorable="d"
+        Title="addQuestion_Answers"
+        Height="450"
+        Width="800">
+    <Window.Resources>
+        <Style x:Key="DarkSpaceStyle"
+               TargetType="Button">
+            <Setter Property="Background"
+                    Value="#2C2C2C" />
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+            <Setter Property="FontSize"
+                    Value="11" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="C:\Users\evert\OneDrive\Afbeeldingen\quiztime.jpg" />
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70px" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+
+        <Label Content="Question Text:"
+               VerticalAlignment="Top"
+               FontWeight="bold"
+               Foreground="white"
+               HorizontalAlignment="Left"
+               Height="23"
+               Margin="140,10,0,0"
+               Grid.Row="0" />
+
+        <TextBox Name="lblQuestionName"
+                 Background="#2C2C2C"
+                 Foreground="White"
+                 FontWeight="Bold"
+                 VerticalAlignment="Top"
+                 HorizontalAlignment="Left"
+                 Height="23"
+                 Width="395"
+                 Grid.Row="0"
+                 Margin="235,10,0,0"
+                 Grid.ColumnSpan="2" />
+
+        <GroupBox Name="grpbxAnswers"
+                  Header="Antwoorden"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Left"
+                  Height="240"
+                  BorderThickness="0"
+                  Width="700"
+                  Grid.Row="2"
+                  Grid.ColumnSpan="2"
+                  Margin="50,0,0,0">
+
+            <Grid Name="grdAnswers"
+                  Height="190">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="49*" />
+                    <RowDefinition Height="46*" />
+                    <RowDefinition Height="48*" />
+                    <RowDefinition Height="48*" />
+                </Grid.RowDefinitions>
+
+                <widget:NewAnswer Grid.Row="0"
+                                  Margin="100,-8,64,4"/>
+                <widget:NewAnswer Margin="100,42,64,42"
+                                  Grid.RowSpan="3" />
+                <widget:NewAnswer Grid.Row="2"
+                                  Margin="100,0,64,36"
+                                  Grid.RowSpan="2"/>
+                <widget:NewAnswer Grid.Row="3"
+                                  Margin="101,2,64,-12"
+                                  RenderTransformOrigin="0.5,0.5">
+                    <widget:NewAnswer.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform />
+                            <SkewTransform AngleY="-0.076" />
+                            <RotateTransform />
+                            <TranslateTransform Y="-0.451" />
+                        </TransformGroup>
+                    </widget:NewAnswer.RenderTransform>
+                </widget:NewAnswer>
+
+            </Grid>
+
+        </GroupBox>
+
+        <Button Name="btnQuestionImage"
+                Style="{StaticResource DarkSpaceStyle}"
+                Content="Upload Image"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Height="29"
+                Width="95"
+                Click="btnQuestionImage_Click"
+                Margin="10,35,0,0" />
+
+        <Label Name="lblQuestionImage"
+               Content=""
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Width="364"
+               Height="27"
+               Margin="261,33,0,0"
+               Grid.ColumnSpan="2"
+               Grid.RowSpan="1" />
+
+        <Button Name="btnSubmit"
+                Style="{StaticResource DarkSpaceStyle}"
+                Content="Toevoegen"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Height="40"
+                Width="80"
+                Click="btnSubmit_click"
+                Grid.Row="5"
+                Margin="40,34,0,0"
+                Grid.Column="1" />
+        <CheckBox Content="Meervoud"
+                  Foreground="White"
+                  FontWeight="bold"
+                  HorizontalAlignment="Left"
+                  Margin="10,10,0,0"
+                  VerticalAlignment="Top"
+                  Checked="CheckBox_Checked"
+                  Grid.Row="0" />
+        <Label Content="Question Image_path:"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Height="30"
+               Margin="140,32,0,0" />
+        <Image Name="questionImageBox"
+               Grid.Column="1"
+               HorizontalAlignment="Left"
+               Height="69"
+               Margin="340,10,0,0"
+               Grid.Row="0"
+               VerticalAlignment="Top"
+               Width="115" />
+        <Label x:Name="activeQuiz"
+               Grid.Column="1"
+               Content="Label"
+               HorizontalAlignment="Left"
+               Margin="365,46,0,0"
+               VerticalAlignment="Top"
+               RenderTransformOrigin="1.316,-0.707" />
+    </Grid>
+
+</Window>

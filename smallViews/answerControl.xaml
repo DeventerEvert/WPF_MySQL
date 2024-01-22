@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="WPF_MySQL.smallViews.answerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WPF_MySQL.smallViews"
+             mc:Ignorable="d"
+             d:DesignHeight="60"
+             d:DesignWidth="400"
+             Background="#2C2C2C"
+             Foreground="White">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70" />
+            <!-- Linkerkant "A" -->
+            <ColumnDefinition Width="Auto" />
+            <!-- Scheiding (streep) -->
+            <ColumnDefinition Width="*" />
+            <!-- Rechterkant, kan groeien zoveel als nodig -->
+        </Grid.ColumnDefinitions>
+
+        <!-- Linkerkant "A" -->
+        <TextBlock x:Name="leftLabel"
+                   Text="{Binding LeftLabel, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                   FontSize="40"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Width="29"
+                   Height="56"
+                   Margin="25,0,0,0" />
+
+        <!-- Scheiding (streep) -->
+        <Border x:Name="separatorBorder"
+                BorderBrush="White"
+                BorderThickness="1"
+                VerticalAlignment="Stretch"
+                Margin="5,0,5,0"
+                Grid.Column="1" />
+
+        <!-- Rechterkant, kan een Image of TextBlock zijn afhankelijk van het Answer object -->
+        <Grid x:Name="rightContentGrid"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              Grid.Column="2">
+
+            <!-- Image -->
+            <Image x:Name="answerImage"
+                   Width="Auto"
+                   VerticalAlignment="center"
+                   HorizontalAlignment="center"
+                   Grid.RowSpan="1" />
+
+            <!-- TextBlock -->
+            <TextBlock x:Name="answerText"  
+                       TextAlignment="Center"
+                       HorizontalAlignment="Left"
+                       FontWeight="Bold"
+                       FontSize="30"
+                       Width="322"
+                       Margin="-4,10,0,10" />
+        </Grid>
+    </Grid>
+</UserControl>

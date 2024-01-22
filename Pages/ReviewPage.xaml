@@ -1,0 +1,26 @@
+﻿<!-- ReviewPage.xaml -->
+<Page x:Class="WPF_MySQL.Pages.ReviewPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Title="Review Page"
+      Background="White">
+
+    <Grid>
+        <!-- Design your review page UI here -->
+        <TextBlock Text="Review Mode"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Margin="10" />
+
+        <!-- Add StackPanel to display correct answers -->
+        <StackPanel x:Name="questionsPanel"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Margin="10">
+            <!-- This StackPanel will contain TextBlocks for each question and correct answer -->
+        </StackPanel>
+    </Grid>
+</Page>

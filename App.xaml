@@ -5,7 +5,6 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <local:Quiztime x:Key="QuiztimeController" />
-        <local:TestController x:Key="TestController" />
         
     </Application.Resources>
 </Application>
