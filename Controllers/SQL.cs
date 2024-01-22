@@ -26,7 +26,7 @@ namespace WPF_MySQL.Controllers
             if (_connection == null)
             {
                 _connection = new MySqlConnection();
-                _connection.ConnectionString = "Server=localhost;User ID=quiz_user;Password=123456789;Database=questions";
+                _connection.ConnectionString = "Server=localhost;User ID=root; Password=; Database=quiztime; ConvertZeroDateTime=True";
                 _connection.Open();
             }
 
