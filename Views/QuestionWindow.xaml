@@ -4,14 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_MySQL.Views"
+        xmlns:local2="clr-namespace:WPF_MySQL.Converters"
         mc:Ignorable="d"
         Title="QuestionWindow" Height="450" Width="800"
         DataContext="{StaticResource QuiztimeController}">
+    <Window.Resources>
+        <local2:YesNoToBooleanConverter x:Key="YesNoConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -24,5 +29,9 @@
                Source="{Binding Path=ActiveQuestion.imagepath}" />
         <Button Grid.Row="2"
                 Content="Test" Name="btnTest" />
+        <StackPanel Grid.Row="3" Margin="10">
+            <TextBox Name="txtValue" />
+            <CheckBox Content="Yes" IsChecked="{Binding ElementName=txtValue, Path=Text,Converter={StaticResource YesNoConverter}}" />
+        </StackPanel>
     </Grid>
 </Window>

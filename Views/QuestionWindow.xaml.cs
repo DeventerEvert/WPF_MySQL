@@ -26,12 +26,10 @@ namespace WPF_MySQL.Views
         Quiztime quiztimeObject; // use instance of Quiztime class 
         public QuestionWindow(Quiztime vm)
         {
-            
             InitializeComponent();
             quiztimeObject = vm;
             this.DataContext = quiztimeObject;
-            
-            
+                        
         }
 
        

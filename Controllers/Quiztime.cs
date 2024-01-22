@@ -2,194 +2,162 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Controls;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 using WPF_MySQL.Models;
 
 namespace WPF_MySQL.Controllers
 {
-	public class Quiztime : SQL, INotifyPropertyChanged
-	{
-		public event PropertyChangedEventHandler PropertyChanged;
+    public class Quiztime : SQL, INotifyPropertyChanged
+    {
 
-		private Quiz _activeQuiz;
-		private List<Quiz> _quizzes = new List<Quiz>();
-		private Question _activeQuestion;
-		private int _myProperty;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-		// create constructor
-		public Quiztime()
-		{
-			_quizzes = getQuizzes();
-			NotifyPropertyChanged(nameof(Quizzes));
-		}
+        private Models.Quiz _activeQuiz;
+        private List<Models.Quiz> _quizzes = new List<Models.Quiz>();
+        private Question _activeQuestion;
 
-		public void UpdateViewModel()
-		{
-			NotifyPropertyChanged(nameof(Quizzes));
-			NotifyPropertyChanged(nameof(ActiveQuiz));
-			NotifyPropertyChanged(nameof(ActiveQuestion));
-			NotifyPropertyChanged(nameof(MyProperty));
-		}
+        // create constructor
+        public Quiztime()
+        {
+            _quizzes = getQuizzes();
+            NotifyPropertyChanged("Quizzes");
+            
+        }
 
-		private List<Question> Questions(int idQuiz)
-		{
-			List<Question> questions = new List<Question>();
-			string query = @"SELECT * FROM question WHERE idQuiz = @idQuiz";
-			using (MySqlCommand cmd = new MySqlCommand(query, Connection))
-			{
-				cmd.Parameters.AddWithValue("@idQuiz", idQuiz);
-				MySqlDataReader reader = cmd.ExecuteReader();
-				while (reader.Read())
-				{
-					Question question = new Question();
-					question.idQuestion = reader.GetInt32(0);
-					question.questionText = reader.GetString(1);
-					if (!reader.IsDBNull(2))
-					{
-						question.image = reader.GetString(2);
-					}
-					question.idQuiz = reader.GetInt32(3);
-					question.Type = reader.GetBoolean(4);
-					questions.Add(question);
-				}
-				reader.Close();
-				reader.Dispose();
-			}
-			foreach (Question question in questions)
-			{
-				try { question.Answers = Answers(question.idQuestion); } catch { }
-			}
-			return questions;
-		}
-
-		public List<Answer> Answers(int idQuestion)
-		{
-			string query = @"SELECT * FROM answer WHERE question_idQuestion = @idQuestion ";
-			List<Answer> answers = new List<Answer>();
-			using (MySqlCommand cmd = new MySqlCommand(query, Connection))
-			{
-				cmd.Parameters.AddWithValue("@idQuestion", idQuestion);
-				MySqlDataReader reader = cmd.ExecuteReader();
-
-				while (reader.Read())
-				{
-					Answer answer = new Answer();
-					answer.idAnswer = reader.GetInt32(0);
-					answer.answerText = reader.GetString(1);
-					if (!reader.IsDBNull(2))
-					{
-						answer.image = reader.GetString(2);
-					}
-					answer.correct = reader.GetBoolean(3);
-					answer.question_idQuestion = reader.GetInt32(4);
-					answers.Add(answer);
-				}
-
-				reader.Close();
-				reader.Dispose();
-			}
-			return answers;
-		}
-
-		public List<Quiz> getQuizzes()
-		{
-			List<Quiz> quizzes = new List<Quiz>();
-			string query = "SELECT * FROM quiz";
-
-			using (MySqlCommand cmd = new MySqlCommand(query, Connection))
-			{
-				MySqlDataReader reader = cmd.ExecuteReader();
-				while (reader.Read())
-				{
-					Quiz quiz = new Quiz();
-					quiz.idQuiz = reader.GetInt32(0);
-					quiz.Quizname = reader.GetString(1);
-					if (!reader.IsDBNull(2))
-					{
-						quiz.Image = reader.GetString(2);
-					}
-					quiz.dateCreated = reader.GetDateTime(3);
-					quizzes.Add(quiz);
-				}
-				reader.Close();
-				reader.Dispose();
-			}
-			Quizzes = quizzes;
-			NotifyPropertyChanged(nameof(Quizzes));
-			return quizzes;
-		}
-
-		public List<Quiz> Quizzes
-		{
-			get { return _quizzes; }
-			set
-			{
-				_quizzes = value;
-				NotifyPropertyChanged(nameof(Quizzes));
-			}
-		}
-
-		public Quiz ActiveQuiz
-		{
-			get { return _activeQuiz; }
-			set
-			{
-				if (_activeQuiz != value)
-				{
-					_activeQuiz = value;
-
-					if (_activeQuiz != null)
-					{
-						// Initialize questions for the active quiz
-						_activeQuiz.Questions = Questions(_activeQuiz.idQuiz);
-					}
-
-					NotifyPropertyChanged(nameof(ActiveQuiz));
-				}
-			}
-		}
+        public void UpdateViewModel()
+        {
+            NotifyPropertyChanged("Quizzes");
+            NotifyPropertyChanged("ActiveQuiz");
+            NotifyPropertyChanged("ActiveQuestion");
+            NotifyPropertyChanged("MyProperty");
+           
+        }
 
 
-		public Question ActiveQuestion
-		{
-			get
-			{
-				return _activeQuestion;
-			}
-			set
-			{
-				_activeQuestion = value;
-				NotifyPropertyChanged(nameof(ActiveQuestion));
-			}
-		}
+/// <summary>
+/// Get questions for a quiz
+/// </summary>
+/// <param name="idQuiz">The quiz parameter</param>
+/// <returns>Questions</returns>
+        private List<Models.Question> Questions(int idQuiz)
+        {
+            List<Models.Question> questions = new List<Models.Question>();
+            string query = "SELECT question.* FROM quiz " +
+                "INNER JOIN quizquestion ON quiz.idQuiz = quizquestion.QuizID " +
+                "INNER JOIN question ON quizquestion.QuestionID = question.idQuestion WHERE quiz.idQuiz = @idQuiz;";
+            using (MySqlCommand cmd = new MySqlCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@idQuiz", idQuiz);
+                MySqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Models.Question question = new Models.Question();
+                    question.idQuestion = reader.GetInt32(0);
+                    question.Type = reader.GetInt32(1);
+                    question.Desc = reader.GetString(2);
+                    question.imagepath = reader.GetString(3);
+                    questions.Add(question);
+                }
+                reader.Close();
+                reader.Dispose();
 
-		public int MyProperty
-		{
-			get { return _myProperty; }
-			set
-			{
-				_myProperty = value;
-				NotifyPropertyChanged(nameof(MyProperty));
-			}
-		}
+            }
+            return questions;
+        }
 
-		public void DoNotifyPropertyChanged(string propertyName)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
+        private List<Models.Quiz> getQuizzes()
+        {
+            List<Models.Quiz> quizzes = new List<Models.Quiz>();
+            string query = "SELECT * FROM quiz";
+         
+            using (MySqlCommand cmd = new MySqlCommand(query, Connection))
+            {
+                MySqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Models.Quiz quiz = new Models.Quiz();
+                    quiz.idQuiz = reader.GetInt32(0);
+                    quiz.Date = reader.GetDateTime(1);
+                    quiz.Name = reader.GetString(2);
+                    quizzes.Add(quiz);
+                }
+                reader.Close();
+                reader.Dispose();
+            }
+            return quizzes;
+        }
 
-		protected void NotifyPropertyChanged([CallerMemberName] string name = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-		}
+        public void UpdateQuiz()
+        {
+            string query = "UPDATE quiz SET Name = @Name WHERE idQuiz = @idQuiz";
+            //Quiz current_active = ActiveQuiz;
 
-		public class ImageButtonTag
-		{
-			public Image ImageBox { get; set; }
-			public TextBlock ImagePath { get; set; }
-		}
-	}
+            using (MySqlCommand cmd = new MySqlCommand(query, Connection))
+            {
+                cmd.Parameters.AddWithValue("@Name", ActiveQuiz.Name);
+                cmd.Parameters.AddWithValue("@idQuiz", ActiveQuiz.idQuiz);
+                cmd.ExecuteNonQuery();
+                // notify the views
+                _quizzes = getQuizzes();
+                //ActiveQuiz = current_active;
+                ActiveQuiz = _quizzes.FirstOrDefault(q => q.idQuiz == ActiveQuiz.idQuiz);
+                NotifyPropertyChanged("Quizzes");
+            }
+        }
+
+        #region Properties
+
+
+        // getter for the quizzes
+        public List<Models.Quiz> Quizzes { 
+            get {
+                return _quizzes;
+            } 
+        }
+
+        public Models.Quiz ActiveQuiz { 
+            get { return _activeQuiz; } 
+            set {
+                // active quiz updated
+                _activeQuiz = value;
+                _activeQuiz.Questions = Questions(_activeQuiz.idQuiz);
+                NotifyPropertyChanged("ActiveQuiz");
+            } 
+        }
+
+        public Question ActiveQuestion { 
+            get {
+                return _activeQuestion; 
+            }
+            set {
+                _activeQuestion = value;
+                NotifyPropertyChanged();
+
+            } 
+        }
+
+        public int MyProperty { get; set; }
+
+        public Boolean MyTrueFalseProperty { get; set; }
+        #endregion
+
+        #region Binding notifiers
+
+        public void DoNotifyPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected void NotifyPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        #endregion
+
+    }
 }

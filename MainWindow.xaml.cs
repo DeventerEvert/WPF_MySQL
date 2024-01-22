@@ -1,13 +1,23 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using WPF_MySQL.Models;
-using WPF_MySQL.Views;
-using Microsoft.Win32;
-using System.Collections.Generic;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using WPF_MySQL.Models;
 using WPF_MySQL.Controllers;
+using System.ComponentModel;
+using System.Windows.Media.Animation;
+using WPF_MySQL.Views;
 
 namespace WPF_MySQL
 {
@@ -16,141 +26,73 @@ namespace WPF_MySQL
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        public Question _newquestion = new Question();
-        public string questionImage;
-
         Controllers.Quiztime quiztimeObject;
+
+        TestWindow AudienceScreen;
+
         public MainWindow()
         {
-
+      
 
             InitializeComponent();
             quiztimeObject = new Controllers.Quiztime(); // create instance of Quiztime class
             this.DataContext = quiztimeObject;
-
+            
             // event handlers
+            btnTest.Click += BtnTest_Click;
+            btnOpenWindow.Click += BtnOpenWindow_Click;
             cmbCombo.SelectionChanged += CmbCombo_SelectionChanged;
+            
+
+
+        }
+
+        private void BtnOpenWindow_Click(object sender, RoutedEventArgs e)
+        {
+           AudienceScreen = new TestWindow(quiztimeObject);
+            // modal open window
+            // tw.ShowDialog();
+           AudienceScreen.Show();
         }
 
         private void CmbCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ComboBox cmbCombo = (ComboBox)sender;
-            if (!string.IsNullOrEmpty(quiztimeObject.ActiveQuiz.Image))
-            {
-                imgQuiz.Source = new BitmapImage(new Uri(quiztimeObject.ActiveQuiz.Image));
-            }
-            Quiz selectedQuiz = (Quiz)cmbCombo.SelectedItem;
-            quiztimeObject.ActiveQuiz = selectedQuiz;
-
-            listViewQuestions.Items.Clear();
-            listAnswers.Items.Clear();
-
+            
+            
             //Quiz _selectedQuiz = (Quiz)cmbCombo.SelectedItem;
             //quiztimeObject.ActiveQuiz = _selectedQuiz;
-            foreach (Question question in quiztimeObject.ActiveQuiz.Questions)
-            {
-                int AnswerCount = 0;
-                if (question.Answers != null)
-                {
-                    Debug.WriteLine($"answers: {question.Answers.Count}");
-                    if (question.Answers.Count > AnswerCount)
-                    {
-                        AnswerCount = question.Answers.Count;
-                    }
+           
 
-                    question.typeName = question.Type ? "Meervoud" : "Standaard";
 
-                    listViewQuestions.Items.Add(question);
-                }
-            }
+        }
 
+        private void BtnTest_Click(object sender, RoutedEventArgs e)
+        {
+           // Debug.WriteLine(quiztimeObject.ActiveQuiz.Name);
+           // Debug.WriteLine(quiztimeObject.ActiveQuiz.Questions.Count.ToString());
+           // create new datetime string
+          
+
+           quiztimeObject.ActiveQuiz.Name = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+           quiztimeObject.UpdateQuiz();
+            
 
         }
 
         private void btnQuestionClick(object sender, RoutedEventArgs e)
         {
-            Button b = (Button)sender;
-            Question Selected_Question = (Question)b.DataContext;
-            quiztimeObject.ActiveQuestion = Selected_Question;
+             Button b = (Button)sender;
+             Question Selected_Question = (Question)b.DataContext;
+             quiztimeObject.ActiveQuestion = Selected_Question;
 
 
             //QuestionWindow questionWindow = new QuestionWindow(quiztimeObject); 
             //questionWindow.Show();
 
+            AudienceScreen.setQuestion = Selected_Question;
 
-
-        }
-
-        private void listViewQuestions_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            listAnswers.Items.Clear();
-
-            Question selectedQuestion = (Question)listViewQuestions.SelectedItem;
-
-            if (selectedQuestion.Answers != null)
-            {
-                foreach (Answer answer in selectedQuestion.Answers)
-                {
-                    if (answer.image == null)
-                    {
-                        this.listAnswers.Items.Add(answer.answerText);
-                    }
-                    else if (answer.image != null)
-                    {
-                        this.listAnswers.Items.Add(answer.image);
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show("Er zijn geen antwoorden");
-            }
-        }
-
-
-        private void changeQuiz_click(object sender, RoutedEventArgs e)
-        {
-
-            createQuiz CreateQuiz = new createQuiz();
-            CreateQuiz.Show();
-            this.Close();
+            
 
         }
-
-
-        private void changeQuiz_btn_Click(object sender, RoutedEventArgs e)
-        {
-            changeQuiz changeQuiz = new changeQuiz();
-            changeQuiz.Show();
-            this.Close();
-        }
-
-		private void startQuiz_click(object sender, RoutedEventArgs e)
-		{
-			if (cmbCombo.SelectedItem == null)
-			{
-				MessageBox.Show("Selecteer een quiz");
-				return;
-			}
-			else
-			{
-				// Directly reference the cmbCombo from XAML
-				ComboBox cmbCombo = this.cmbCombo;
-
-				// Assuming that your ComboBox is bound to Quiz objects
-				if (cmbCombo.SelectedItem is Quiz selectedQuiz)
-				{
-
-					startQuiz StartQuiz = new startQuiz(quiztimeObject, selectedQuiz);
-					StartQuiz.Show();
-
-					controlQuiz ControlQuiz = new controlQuiz(quiztimeObject, StartQuiz);
-					ControlQuiz.Show();
-
-					this.Close();
-				}
-			}
-		}
-	}
+    }
 }

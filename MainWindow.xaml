@@ -6,187 +6,74 @@
         xmlns:local="clr-namespace:WPF_MySQL"
         mc:Ignorable="d"
         Title="MainWindow"
-        SizeToContent="WidthAndHeight"
-        WindowState="Maximized"
+        Height="450"
+        Width="800"
         DataContext="{StaticResource QuiztimeController}">
-    <Window.Resources>
-        <Style x:Key="DarkSpaceStyle"
-               TargetType="Button">
-            <Setter Property="Background"
-                    Value="#2C2C2C" />
-            <Setter Property="Foreground"
-                    Value="White" />
-            <Setter Property="FontWeight"
-                    Value="Bold" />
-            <Setter Property="FontSize"
-                    Value="18" />
-        </Style>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <Style x:Key="DarkSpaceControl"
-               TargetType="Control">
-            <Setter Property="Background"
-                    Value="#2C2C2C" />
-            <Setter Property="Foreground"
-                    Value="White" />
-            <Setter Property="FontWeight"
-                    Value="Bold" />
-            <Setter Property="FontSize"
-                    Value="8" />
-        </Style>
+        <ComboBox Grid.Row="4"
+                  ItemsSource="{Binding Path=Quizzes}"
+                  SelectedItem="{Binding Path=ActiveQuiz,UpdateSourceTrigger=PropertyChanged}"
+                  DisplayMemberPath="Name"
+                  Name="cmbCombo" />
+        <Button Grid.Row="0"
+                Content="Button Test"
+                Name="btnTest" />
+        <Button Grid.Row="1"
+                Content="Button Open Window"
+                Name="btnOpenWindow" />
 
-        <Style x:Key="darkSpaceAnswrList"
-               TargetType="ListBox">
-            <Setter Property="Background"
-                    Value="#2C2C2C" />
-            <Setter Property="Foreground"
-                    Value="White" />
-            <Setter Property="FontWeight"
-                    Value="Bold" />
-            <Setter Property="FontSize"
-                    Value="8" />
-        </Style>
 
-    </Window.Resources>
-    <Viewbox Stretch="UniformToFill">
-        <Grid Width="800"
-              Height="450">
-            <Grid.Background>
-                <ImageBrush ImageSource="C:\Users\evert\OneDrive\Afbeeldingen\quiztime.jpg" />
 
-            </Grid.Background>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <Label Grid.Row="2"
+               Content="{Binding Path=ActiveQuiz.Name}"
+               Name="lblTest" />
 
-            <ComboBox Grid.Row="1"
-                      ItemsSource="{Binding Path=Quizzes}"
-                      SelectedItem="{Binding Path=ActiveQuiz, UpdateSourceTrigger=PropertyChanged}"
-                      HorizontalContentAlignment="Center"
-                      DisplayMemberPath="Quizname"
-                      Name="cmbCombo"
-                      Foreground="White"
-                      Background="#2C2C2C"
-                      FontWeight="Bold"
-                      FontSize="18"
-                      Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"
-                      Margin="472,10,0,0"
-                      Width="318"
-                      HorizontalAlignment="Left"
-                      VerticalAlignment="Top">
-                <ComboBox.ItemContainerStyle>
-                    <Style TargetType="ComboBoxItem">
-                        <Setter Property="Background"
-                                Value="#2C2C2C" />
-                        <Setter Property="BorderBrush"
-                                Value="#2C2C2C" />
-                    </Style>
-                </ComboBox.ItemContainerStyle>
-            </ComboBox>
+        <ListBox Grid.Row="3"
+                 ItemsSource="{Binding Path=ActiveQuiz.Questions}"
+                 DisplayMemberPath="imagepath"></ListBox>
 
-            <Image Name="imgQuiz"
-                   HorizontalAlignment="Left"
-                   Height="173"
-                   Margin="472,68,0,0"
-                   Stretch="UniformToFill"
-                   VerticalAlignment="Top"
-                   Width="318"
-                   Grid.Row="1"
-                   Grid.RowSpan="2" />
 
-            <Label Grid.Row="1"
-                   Content="{Binding Path=ActiveQuiz.Quizname}"
-                   Visibility="Collapsed"
-                   Name="lblTest"
-                   Margin="108,18,504,90" />
-            <ListView x:Name="listViewQuestions"
-                      Style="{StaticResource DarkSpaceControl}"
-                      Grid.Row="3"
-                      MouseDoubleClick="listViewQuestions_MouseDoubleClick"
-                      Margin="21,0,313,36"
-                      RenderTransformOrigin="0.5,0.5">
-                <ListView.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleY="1" />
-                        <SkewTransform />
-                        <RotateTransform />
-                        <TranslateTransform />
-                    </TransformGroup>
-                </ListView.RenderTransform>
-                <ListView.View>
-                    <GridView AllowsColumnReorder="True">
-                        <GridViewColumn DisplayMemberBinding="{Binding idQuestion}"
-                                        Width="0" />
-                        <GridViewColumn Header="Question"
-                                        DisplayMemberBinding="{Binding questionText}"
-                                        Width="auto" />
-                        <GridViewColumn Header="Answer"
-                                        DisplayMemberBinding="{Binding Answers.Count}"
-                                        Width="auto" />
-                        <GridViewColumn Header="Type"
-                                        DisplayMemberBinding="{Binding typeName}"
-                                        Width="auto" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            <ListBox Name="listAnswers"
-                     Style="{StaticResource darkSpaceAnswrList}"
-                     DisplayMemberPath="{Binding answerText}"
-                     Grid.Row="3"
-                     Margin="380,22,316,39"
-                     RenderTransformOrigin="0.5,0.5"
-                     BorderThickness="0">
-                <ListBox.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleY="1" />
-                        <SkewTransform />
-                        <RotateTransform />
-                        <TranslateTransform />
-                    </TransformGroup>
-                </ListBox.RenderTransform>
-            </ListBox>
-            <Button x:Name="changeQuiz"
-                    Style="{StaticResource DarkSpaceStyle}"
-                    Content="Quiz Toevoegen"
-                    HorizontalAlignment="Left"
-                    Margin="21,55,0,0"
-                    Grid.Row="2"
-                    VerticalAlignment="Top"
-                    Width="150"
-                    Click="changeQuiz_click"
-                    Height="49" />
-            <Button x:Name="startQuiz"
-                    Style="{StaticResource DarkSpaceStyle}"
-                    Content="Quiz Starten"
-                    HorizontalAlignment="Left"
-                    Margin="21,68,0,0"
-                    Grid.Row="1"
-                    VerticalAlignment="Top"
-                    Width="150"
-                    Height="50"
-                    Click="startQuiz_click" />
-            <Label Content="AntwoordLijst"
-                   FontWeight="Bold"
-                   FontSize="9"
-                   HorizontalAlignment="Left"
-                   Margin="396,0,0,0"
-                   Grid.Row="3"
-                   VerticalAlignment="Top"
-                   Width="72"
-                   Height="24" />
-            <Button x:Name="changeQuiz_btn"
-                    Style="{StaticResource DarkSpaceStyle}"
-                    Content="Quiz veranderen"
-                    HorizontalAlignment="Left"
-                    Margin="21,136,0,0"
-                    Grid.Row="1"
-                    VerticalAlignment="Top"
-                    Width="150"
-                    Height="50"
-                    Click="changeQuiz_btn_Click"
-                    Grid.RowSpan="2" />
-        </Grid>
-    </Viewbox>
+        <ListView Grid.Row="6"
+                  ItemsSource="{Binding Path=ActiveQuiz.Questions}"
+                  d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="700">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="{Binding Path=imagepath}"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               RenderOptions.BitmapScalingMode="Fant"
+                               Stretch="Fill"
+                               Width="64"
+                               Height="64" 
+                               Grid.Column="0"/>
+                        <TextBlock Text="{Binding Path=Desc}"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom" 
+                                   Grid.Column="1"/>
+                        <Button Content="Button"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Click="btnQuestionClick" 
+                                Grid.Column="2"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </Grid>
 </Window>
